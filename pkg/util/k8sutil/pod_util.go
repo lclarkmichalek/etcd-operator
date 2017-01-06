@@ -22,13 +22,13 @@ import (
 	unversionedAPI "k8s.io/kubernetes/pkg/api/unversioned"
 )
 
-func etcdContainer(commands, version string) api.Container {
+func etcdContainer(commands, baseImage, version string) api.Container {
 	c := api.Container{
 		// TODO: fix "sleep 5".
 		// Without waiting some time, there is highly probable flakes in network setup.
 		Command: []string{"/bin/sh", "-c", fmt.Sprintf("sleep 5; %s", commands)},
 		Name:    "etcd",
-		Image:   MakeEtcdImage(version),
+		Image:   MakeEtcdImage(baseImage, version),
 		Ports: []api.ContainerPort{
 			{
 				Name:          "server",

@@ -46,7 +46,7 @@ func PodWithAddMemberInitContainer(p *api.Pod, endpoints []string, name string, 
 	containerSpec := []api.Container{
 		{
 			Name:  "add-member",
-			Image: MakeEtcdImage(cs.Version),
+			Image: MakeEtcdImage(cs.BaseImage, cs.Version),
 			Command: []string{
 				"/bin/sh", "-c",
 				fmt.Sprintf("ETCDCTL_API=3 etcdctl --endpoints=%s member add %s --peer-urls=%s", strings.Join(endpoints, ","), name, strings.Join(peerURLs, ",")),
@@ -72,7 +72,7 @@ func MakeSelfHostedEtcdPod(name string, initialCluster []string, clusterName, st
 		commands = fmt.Sprintf("%s --initial-cluster-token=%s", commands, token)
 	}
 
-	c := etcdContainer(commands, cs.Version)
+	c := etcdContainer(commands, cs.BaseImage, cs.Version)
 	c.Env = []api.EnvVar{envPodIP}
 	pod := &api.Pod{
 		ObjectMeta: api.ObjectMeta{

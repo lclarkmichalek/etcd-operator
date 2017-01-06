@@ -60,6 +60,9 @@ type ClusterSpec struct {
 	// equal to the expected version.
 	Version string `json:"version"`
 
+	// BaseImage is the docker image prefix that will be used to run the etcd nodes
+	BaseImage string `json:"baseImage"`
+
 	// Backup defines the policy to backup data of etcd cluster if not nil.
 	// If backup policy is set but restore policy not, and if a previous backup exists,
 	// this cluster would face conflict and fail to start.
